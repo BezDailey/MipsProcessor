@@ -85,3 +85,61 @@ class Convertor:
         hexadecimal = hexadecimal[::-1]
         return hexadecimal
 
+    def decimal_to_binary(self, decimal_value):
+        binary = ""
+        decimal = decimal_value
+        if decimal_value < 0:
+            decimal = decimal * (-1)
+        while decimal > 0:
+            binary += str(decimal % 2)
+            decimal /= 2
+            decimal= int(decimal)
+        binary = binary[::-1]
+        if(len(binary) < 31):
+            padding = 31 - len(binary)
+            binary = "0" * padding + binary
+        if decimal_value < 0:
+            binary = "-" + binary
+        return binary
+
+    def decimal_to_binary_twos_complement(self, decimal_value):
+        if(decimal_value < 0):
+            decimal = decimal_value * (-1)
+            binary = ""
+            while decimal > 0:
+                binary += str(decimal % 2)
+                decimal /= 2
+                decimal= int(decimal)
+            binary = binary[::-1]
+            if(len(binary) < 32):
+                padding = 32 - len(binary)
+                binary = "0" * padding + binary
+            binary_list = list(binary)
+            for i in range(0, 32):
+                if binary_list[i] == "0":
+                    binary_list[i] = "1"
+                else:
+                    binary_list[i] = "0"
+            binary = "".join(binary_list)
+            binary = bin(int(binary,2) + 1)
+            return binary[2:]
+        else:
+            binary = self.decimal_to_binary(decimal_value)
+            binary = "0" + binary
+            return binary
+
+    def convert_twos_complement_binary_to_decimal(self,binary):
+        if binary[0] == "0":
+            return (self.binary_to_decimal(binary))
+        if binary[1] == "1":
+            binary_list = list(binary)
+            for i in range(0, 32):
+                if binary_list[i] == "0":
+                    binary_list[i] = "1"
+                else:
+                    binary_list[i] = "0"
+            binary = "".join(binary_list)
+            decimal = (self.binary_to_decimal(binary) * (-1)) - 1
+            return decimal
+
+
